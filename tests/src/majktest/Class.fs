@@ -47,3 +47,21 @@ let ``majk should compose`` () =
 
         test <@ v0.Value = true @>
         test <@ v1.Value = true @>
+
+[<Test>]
+let ``majk should propogate exceptions`` () =
+
+        let msg = "majk failed badly"
+        let lt0 = majk {
+            failwith msg
+            return 10
+        }
+        let lt1 = majk {
+            let! foo = lt0
+            return foo + 20  
+        }
+
+        let r = lt1.Start()
+        raisesWith<System.Exception> <@ r.Wait(500) @> (fun e -> <@ e.ToString().Contains msg @>)
+
+
