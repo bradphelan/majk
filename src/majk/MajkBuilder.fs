@@ -31,6 +31,20 @@ type LazyTask<'T> (f : unit -> Task<'T> )  =
 type MajkBuilder() = 
     member this.Delay(f) = f
     member this.Run(f:unit->LazyTask<'T>) = new LazyTask<_>(fun () -> f().Start()) 
+
+    member this.Bind(ms:LazyTask<'T> list, f:'T list->LazyTask<'U>) =
+        let x = async { 
+            let! v = 
+                ms
+                |> Seq.map (fun m -> m.Start() |> Async.AwaitTask )
+                |> Async.Parallel
+            return! f(v |> Seq.toList).Start() |> Async.AwaitTask
+         }
+
+        new LazyTask<_>( fun () -> 
+            x |> Async.StartAsTask 
+        )
+
     member this.Bind(m:LazyTask<'T>, f:'T->LazyTask<'U>) =
 
         let x = async {

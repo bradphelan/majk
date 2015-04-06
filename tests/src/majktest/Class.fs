@@ -113,3 +113,20 @@ let ``We can combine targets`` () =
 
     c.Start().Wait()
     test <@ c.Start().Result = "abc" @>
+
+[<Test>]
+let ``We can combine targets in parallel`` () =
+
+    let t0 = majk { return "a" }
+    let t1 = majk { return "b" }
+    let t2 = majk { return "c" }
+
+    let c = majk {
+
+        let! [v0;v1;v2] = [t0;t1;t2]
+        return v0 + v1 + v2
+
+    }
+
+    c.Start().Wait()
+    test <@ c.Start().Result = "abc" @>
