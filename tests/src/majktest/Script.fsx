@@ -2,5 +2,5 @@
 // for more guidance on F# programming.
 
 #load "Component1.fs"
-open majk
+open majktest
 

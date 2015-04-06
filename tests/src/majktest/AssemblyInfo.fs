@@ -1,8 +1,8 @@
-﻿module majk.AssemblyInfo
+﻿module majktest.AssemblyInfo
 open System.Reflection
 open System.Runtime.CompilerServices
 
-[<assembly: AssemblyTitle("majk")>]
+[<assembly: AssemblyTitle("majktest")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
